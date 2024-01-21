@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-USER_NAME = $1
-PASSWORD = $2
+USER_NAME=$1
+PASSWORD=$2
 
 mkdir -p ~/private-registry
 
@@ -10,5 +10,3 @@ cp ./docker-compose.yml ~/private-registry/registry-data/docker-compose.yml
 
 mkdir -p ~/private-registry/auth
 htpasswd -Bc ~/private-registry/auth/registry.password $USER_NAME $PASSWORD
-
-
