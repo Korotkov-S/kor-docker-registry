@@ -11,6 +11,4 @@ cp ./docker-compose.yml ~/private-registry/registry-data/docker-compose.yml
 mkdir ~/private-registry/auth
 htpasswd -Bc ~/private-registry/auth/registry.password $USER_NAME $PASSWORD
 
-apt install nginx apache2-utils -y
-
 
