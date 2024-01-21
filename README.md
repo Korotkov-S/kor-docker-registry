@@ -16,3 +16,8 @@ sh setup-nginx.sh
 ```bash
 sh setup-docker-registry.sh username
 ```
+
+4) Run docker registry
+```bash
+sh run-docker-registry.sh
+```
