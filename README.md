@@ -14,5 +14,5 @@ sh setup-nginx.sh
 
 3) Setup docker registry
 ```bash
-sh setup-docker-registry.sh username userpassword
+sh setup-docker-registry.sh username
 ```
