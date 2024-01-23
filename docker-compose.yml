@@ -1,6 +1,25 @@
 version: '3'
 
 services:
+  traefik:
+    image: traefik
+    container_name: 'traefik'
+    command:
+      - '--providers.docker=true'
+      - '--providers.docker.network=common-traefik'
+      - '--providers.docker.exposedByDefault=false'
+      - '--entryPoints.http.address=:80'
+      - '--entryPoints.https.address=:443'
+      - '--certificatesResolvers.letsEncrypt.acme.httpChallenge=true'
+      - '--certificatesResolvers.letsEncrypt.acme.httpChallenge.entryPoint=http'
+      - '--certificatesResolvers.letsEncrypt.acme.storage=/certs/acme.json'
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - './certs:/certs'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+
   registry:
     image: registry:latest
     restart: always
@@ -11,6 +30,19 @@ services:
       REGISTRY_AUTH_HTPASSWD_REALM: Registry
       REGISTRY_AUTH_HTPASSWD_PATH: /auth/registry.password
       REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /registry-data
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=common-traefik'
+      - 'traefik.http.routers.landing-staging.rule=Host(`registry.localhost`)'
+      - 'traefik.http.routers.landing-staging.entryPoints=https'
+      - 'traefik.http.routers.landing-staging.tls=true'
+      - 'traefik.http.routers.landing-staging.tls.certResolver=letsEncrypt'
     volumes:
       - ./auth:/auth
       - ./registry-data:/registry-data
+
+networks:
+  default:
+    name: common-traefik
+    external: true
+
